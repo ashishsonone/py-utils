@@ -1,4 +1,4 @@
-# Run
+# Run local development
 uvicorn main:app --reload
 
 # Copy
@@ -37,27 +37,6 @@ curl --location "https://$HOST/api/sql" \
     "Duckota",
     "Fanning",
     "female"
-  ],
-  [
-    "FQ4dU1",
-    "yellow",
-    "Duck",
-    "Norris",
-    "male"
-  ],
-  [
-    "JqS7ZZ",
-    "red",
-    "James",
-    "Pond",
-    "male"
-  ],
-  [
-    "ZM5uJL",
-    "black",
-    "Darth",
-    "Wader",
-    "male"
   ]
 ],
     "query" : "SELECT color, count(*) as num_ducks from mytable group by color"
@@ -102,7 +81,7 @@ function REMOTE_SQL(tableData, query) {
 }
 ```
 
-# service
+# setup as service
 
 ```bash
 sudo systemctl enable py-utils.service
