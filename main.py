@@ -10,12 +10,22 @@ app = FastAPI()
 
 JSONObject = Dict[str, Any]
 
+import os
+
+DEBUG_ON = os.environ.get('DEBUG') == '1'
+
+def debug(*args):
+    if DEBUG_ON:
+        print('DEBUG', *args)
+
 @app.post("/api/sql/")
-def read_item(body: JSONObject = None):
+async def run_sql(body: JSONObject = None):
     try:
         tableData = body['tableData']
         # prin t(tableData[1])
         query = body['query']
+        debug('query=', query)
+        debug('head=', tableData[0:5])
         mytable = pd.DataFrame(tableData[1:], columns=tableData[0])
 
         out = duckdb.query(query)

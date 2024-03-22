@@ -1,3 +1,17 @@
+# dependences
+```bash
+conda create -n py-utils-api python=3.9
+conda activate py-utils-api
+
+pip install fastapi
+pip install "uvicorn[standard]"
+pip install duckdb
+
+
+pip freeze > requirements.txt
+pip install -r requirements.txt
+```
+
 # Run local development
 uvicorn main:app --reload
 
@@ -5,41 +19,16 @@ uvicorn main:app --reload
 DEST='ubuntu@sonone-cloud:~/APPS/PY-UTILS/'
 scp main.py $DEST
 
-# dependences
-pip install fastapi
-pip install "uvicorn[standard]"
-pip install duckdb
-
-
-# example curl
+# docker build
 ```bash
-curl --location "https://$HOST/api/sql" \
+docker build -t py-utils-api:latest .
+docker run -it -p 8585:8080 py-utils-api
+
+curl --location 'http://localhost:8585/api/sql/' \
 --header 'Content-Type: application/json' \
 --data '{
-    "tableData" : [
-  [
-    "id",
-    "color",
-    "firstName",
-    "lastName",
-    "gender"
-  ],
-  [
-    "kA0KgL",
-    "red",
-    "Marty",
-    "McFly",
-    "male"
-  ],
-  [
-    "dx3ngL",
-    "teal",
-    "Duckota",
-    "Fanning",
-    "female"
-  ]
-],
-    "query" : "SELECT color, count(*) as num_ducks from mytable group by color"
+    "tableData" : [["Name"], ["A"], ["B"], ["C"], ["D"]],
+    "query" : "SELECT * from mytable LIMIT 3"
 }'
 ```
 
@@ -81,6 +70,12 @@ function REMOTE_SQL(tableData, query) {
 }
 ```
 
+# logs
+```bash
+# logs
+journalctl -f -u py-utils.service
+```
+
 # setup as service
 
 ```bash
@@ -107,3 +102,15 @@ ExecStart=/home/ubuntu/miniconda3/bin//uvicorn --port 8585 main:app
 WantedBy=multi-user.target
 
 ```
+
+# fly commands
+```
+fly launch --now
+
+fly scale show
+fly scale count 1
+
+fly deploy --strategy immediate
+# rolling, immediate, canary, bluegreen
+```
+
