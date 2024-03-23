@@ -39,3 +39,37 @@ async def run_sql(body: JSONObject = None):
     except Exception as e:
         raise HTTPException(status_code=500, detail=repr(e))
 
+@app.post("/api/sql-v2/")
+async def run_sql(body: JSONObject = None):
+    with duckdb.connect("file.db") as con:
+        try:
+            tables = body['tables']
+            # prin t(tableData[1])
+            query = body['query']
+            debug('query=', query)
+            debug('head=', tables[0][0:5])
+
+            df_list = []
+            for i in range(len(tables)):
+                table = tables[i]
+                df = pd.DataFrame(table[1:], columns=table[0])
+                df_list.append(df)
+
+            # register the table with duckdb connection
+            # t1 => df_list[0]
+            # t2 => df_list[1]
+            # ...
+            for i in range(len(df_list)):
+                con.register(f"t{i+1}", df_list[i])
+
+            out = con.query(query)
+            # print(out)
+            outDf = out.to_df()
+            outTable = [outDf.columns.tolist()] + outDf.values.tolist()
+            result = {
+                'outTable' : outTable
+            }
+            return result
+        except Exception as e:
+            print(e)
+            raise HTTPException(status_code=500, detail=repr(e))

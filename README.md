@@ -123,3 +123,12 @@ gcloud run deploy
 gcloud run services describe py-utils-api --region asia-south1
 
 ```
+
+# TODO
+[x] Add support for multiple tables so you could do something like join
+  [ ] formula : `=REMOTE_SQL(query, num_table, t1, t2, t3, arg1, arg2, arg3)`
+  [ ] sql : `SELECT * FROM t1 JOIN t2 ON t1.Field1 = t2.Field2 WHERE name LIKE '%$1%'`
+
+[ ] Add support for stringified range ("A1:C10") instead of actual table ref (A1:C10) so that it doesn't recompute frequently when you're changing table content, but only when we want it
+  [ ] formula : `=LAZY_REMOTE_SQL(trigger_cell_ref, 1, "A1:C10", "SELECT COUNT(*) FROM mytable", C1)`
+
