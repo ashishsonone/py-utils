@@ -12,6 +12,7 @@ const BASE_URL = "https://py-utils-sononehouse.fly.dev"
 function sanitizeTable(tableData){
   const dateType = typeof(new Date())
 
+  let breakIndex = -1
   // sanitize date inside data
   for (var i=0; i< tableData.length; i++) {
     const row = tableData[i]
@@ -20,7 +21,28 @@ function sanitizeTable(tableData){
         row[j] = Utilities.formatDate(row[j], 'Asia/Kolkata', "YYYY-MM-dd");
       }
     }
+
+    if (row[0] == ''){
+      // empty first column, we break and break array till this index
+      breakIndex = i
+      break
+    }
   }
+
+  if (breakIndex >= 0){
+    tableData.length = breakIndex
+  }
+  else {
+    return tableData
+  }
+}
+
+/**
+ * @customfunction
+ * 
+ */
+function testDebug(tableData) {
+  return typeof(tableData[tableData.length-1][0])
 }
 
 /**

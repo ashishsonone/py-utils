@@ -105,3 +105,5 @@ gcloud run services describe py-utils-api --region asia-south1
 [ ] Add support for stringified range ("A1:C10") instead of actual table ref (A1:C10) so that it doesn't recompute frequently when you're changing table content, but only when we want it
   [ ] formula : `=LAZY_REMOTE_SQL(trigger_cell_ref, 1, "A1:C10", "SELECT COUNT(*) FROM mytable", C1)`
 
+[ ] Don't send empty rows to server api in appscript
+  [ ] trim the table if first column of any row is empty
