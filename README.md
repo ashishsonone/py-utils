@@ -104,7 +104,7 @@ WantedBy=multi-user.target
 ```
 
 # fly commands
-```
+```bash
 fly launch --now
 
 fly scale show
@@ -114,3 +114,12 @@ fly deploy --strategy immediate
 # rolling, immediate, canary, bluegreen
 ```
 
+# glcoud run commands
+```bash
+gcloud run deploy
+
+#Building using Dockerfile and deploying container to Cloud Run service [py-utils-api] in project [ytapi-371521] region [asia-south1]
+
+gcloud run services describe py-utils-api --region asia-south1
+
+```
