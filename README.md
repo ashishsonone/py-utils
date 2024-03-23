@@ -1,3 +1,14 @@
+# how to use in excel
+```js
+// v1
+REMOTE_SQL(table, query, arg1, arg2)
+
+
+// v2
+REMOTE_SQL_V2(query, num_tables, table1, table2, arg1, arg2)
+REMOTE_SQL_V2(query, 2, t1, t2, 'Mum')
+```
+
 # dependences
 ```bash
 conda create -n py-utils-api python=3.9
@@ -30,44 +41,6 @@ curl --location 'http://localhost:8585/api/sql/' \
     "tableData" : [["Name"], ["A"], ["B"], ["C"], ["D"]],
     "query" : "SELECT * from mytable LIMIT 3"
 }'
-```
-
-# remote sql google sheet function
-```js
-/**
- * Remote SQL query execution
- * 
- * @param {A1:C10} table Table data
- * @param {"select * from mytable"} query SQL query string
- * @return {Table} Output Table.
- * @customfunction
- * 
- * e.g
- * =REMOTE_SQL(<students>, "SELECT COUNT(*) from mytable")
- */
-function REMOTE_SQL(tableData, query) {
-  const URL = "https://$HOST/api/sql"
-
-  const dateType = typeof(new Date())
-  for (var i=0; i< tableData.length; i++) {
-    const row = tableData[i]
-    for (var j=0; j < row.length; j++) {
-      if (typeof(row[j]) == dateType) {
-        row[j] = Utilities.formatDate(row[j], 'Asia/Kolkata', "YYYY-MM-dd");
-      }
-    }
-  }
-
-  var response = UrlFetchApp.fetch(URL, {
-      method: 'post',
-      contentType: 'application/json',
-      payload: JSON.stringify({tableData, query})
-  });
-  var result = JSON.parse(response.getContentText());
-  const outTable = result.outTable
-  console.log(outTable)
-  return outTable
-}
 ```
 
 # logs
@@ -116,7 +89,7 @@ fly deploy --strategy immediate
 
 # glcoud run commands
 ```bash
-gcloud run deploy
+gcloud run deploy py-utils-api --source . --region asia-south1
 
 #Building using Dockerfile and deploying container to Cloud Run service [py-utils-api] in project [ytapi-371521] region [asia-south1]
 
