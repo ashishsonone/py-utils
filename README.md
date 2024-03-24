@@ -104,7 +104,7 @@ gcloud run services describe py-utils-api --region asia-south1
 
 [x] Lazy execution - Add support for stringified range ("A1:C10") instead of actual table ref (A1:C10) so that it doesn't recompute frequently when you're changing table content, but only when we want it
   [x] formula : `LAZY_REMOTE_SQL_V2(A1, "SELECT COUNT(*) from mytable WHERE date='$1'", 1, "A1:C10", "O1")`
-  [ ] TODO support named ranges e.g "computed"
+  [x] support named ranges e.g "computed" - already works by default
 
 [x] Don't send empty rows to server api in appscript
   [ ] trim the table if first column of any row is empty
