@@ -100,6 +100,18 @@ gcloud run services describe py-utils-api --region asia-south1
 
 ```
 
+# prql
+https://prql-lang.org/playground/
+```prql
+from tracks
+select {
+  tracks.name,
+  a = s"RANDOM()::TEXT",
+  now = s"LEN(RANDOM()::varchar)"
+}
+take 10
+```
+
 # TODO
 [x] Add support for multiple tables so you could do something like join
   [ ] formula : `=REMOTE_SQL(query, num_table, t1, t2, t3, arg1, arg2, arg3)`
