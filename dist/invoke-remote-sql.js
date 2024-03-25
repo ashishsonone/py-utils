@@ -146,11 +146,24 @@ function handleServerResponse(response) {
  * =LAZY_REMOTE_SQL_V2(A1, A2, 1, "B1:D10", "O1") // A1 contains trigger value, A2 contains query, O1 contains the date e.g "2023-01-05"
  */
 function LAZY_REMOTE_SQL_V2(triggerCell, query, numTable, table1Notn, table2Notn, arg1Notn, arg2Notn) {
+  return CORE_LAZY_REMOTE_SQL_V2(false, ...arguments)
+}
+
+/**
+ * @customfunction
+ * 
+ */
+function LAZY_REMOTE_PRQL_V2(triggerCell, query, numTable, table1Notn, table2Notn, arg1Notn, arg2Notn) {
+  return CORE_LAZY_REMOTE_SQL_V2(true, ...arguments)
+}
+
+function CORE_LAZY_REMOTE_SQL_V2(usePrql, triggerCell, query, numTable, table1Notn, table2Notn, arg1Notn, arg2Notn) {
   const URL = `${BASE_URL}/api/sql-v2/`
+  const START_TABLE_INDEX=4
 
   const args = Array.from(arguments);
 
-  const tableRefList = args.slice(3, 3+numTable)
+  const tableRefList = args.slice(START_TABLE_INDEX, START_TABLE_INDEX+numTable)
   const tables = []
 
   for (tableRef of tableRefList) {
@@ -161,7 +174,7 @@ function LAZY_REMOTE_SQL_V2(triggerCell, query, numTable, table1Notn, table2Notn
   }
 
   const sqlArgs = []
-  const sqlArgRefList = args.slice(3+numTable)
+  const sqlArgRefList = args.slice(START_TABLE_INDEX+numTable)
   for (cellRef of sqlArgRefList) {
     const cellValue = getCellValue(cellRef)
     sqlArgs.push(cellValue)
@@ -179,7 +192,8 @@ function LAZY_REMOTE_SQL_V2(triggerCell, query, numTable, table1Notn, table2Notn
 
   const requestBody = {
     tables: tables,
-    query: finalQuery
+    query: finalQuery,
+    usePrql,
   }
   // console.log(requestBody)
 
@@ -192,6 +206,10 @@ function LAZY_REMOTE_SQL_V2(triggerCell, query, numTable, table1Notn, table2Notn
 
   return handleServerResponse(response)
 }
+
+
+
+
 
 /**
  * Remote SQL query execution
@@ -211,18 +229,33 @@ function LAZY_REMOTE_SQL_V2(triggerCell, query, numTable, table1Notn, table2Notn
  * =REMOTE_SQL_V2(A1, 1, <students>, B1, B2) // A1 contains the sql query, B1 & B2 are arguments $1 & $2 respectively
  * 
  */
+
 function REMOTE_SQL_V2(query, numTable, table1, table2, arg1, arg2) {
+  return CORE_REMOTE_SQL_V2(false, ...arguments)
+}
+
+/**
+ * @customfunction
+ * 
+ */
+function REMOTE_PRQL_V2(query, numTable, table1, table2, arg1, arg2) {
+  return CORE_REMOTE_SQL_V2(true, ...arguments)
+}
+
+function CORE_REMOTE_SQL_V2(usePrql, query, numTable, table1, table2, arg1, arg2) {
   const URL = `${BASE_URL}/api/sql-v2/`
+
+  const START_TABLE_INDEX=3
 
   const args = Array.from(arguments);
 
-  const tables = args.slice(2, 2+numTable)
+  const tables = args.slice(START_TABLE_INDEX, START_TABLE_INDEX+numTable)
 
   for (table of tables) {
     sanitizeTable(table)
   }
 
-  const sqlArgs = args.slice(2+numTable) // <table>, <query>, <arg1>, <arg2>, ...
+  const sqlArgs = args.slice(START_TABLE_INDEX+numTable) // <table>, <query>, <arg1>, <arg2>, ...
   // sanitize date inside arguments
   sanitizeTable([sqlArgs])
 
@@ -235,7 +268,8 @@ function REMOTE_SQL_V2(query, numTable, table1, table2, arg1, arg2) {
 
   const requestBody = {
     tables: tables,
-    query: finalQuery
+    query: finalQuery,
+    usePrql,
   }
   // console.log(requestBody)
 
