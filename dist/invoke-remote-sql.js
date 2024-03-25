@@ -6,7 +6,7 @@ function testRemoteSql() {
 
   // out = REMOTE_SQL_V2(query, 2, t1, t2, 'Mum')
   // LAZY_REMOTE_SQL_V2("32", "SELECT COUNT(*) from t1 WHERE date='$1'", 1, "OilV2!A1:C100", "OilV2!O2")
-  LAZY_REMOTE_SQL_V2("1", "SELECT * from t1", 1, "Sheet4!A1:C10")
+  LAZY_REMOTE_SQL_V2("1", "SELECT *,kk from t1", 1, "Sheet4!A1:C10")
 }
 
 const BASE_URL = "https://py-utils-sononehouse.fly.dev"
@@ -87,12 +87,11 @@ function REMOTE_SQL(tableData, query) {
   var response = UrlFetchApp.fetch(URL, {
       method: 'post',
       contentType: 'application/json',
-      payload: JSON.stringify(requestBody)
+      payload: JSON.stringify(requestBody),
+      muteHttpExceptions: true
   });
-  var result = JSON.parse(response.getContentText());
-  const outTable = result.outTable
-  console.log(outTable)
-  return outTable
+
+  return handleServerResponse(response)
 }
 
 /**
@@ -112,6 +111,20 @@ function getTableFromRange(rangeRef) {
 function getCellValue(cellRef) {
     const cellValue = SpreadsheetApp.getActiveSpreadsheet().getRange(cellRef).getValue()
     return cellValue
+}
+
+function handleServerResponse(response) {
+  if (response.getResponseCode() == 200) {
+    var result = JSON.parse(response.getContentText());
+    const outTable = result.outTable
+    // console.log(outTable)
+    return outTable
+  }
+  else {
+    // error
+    var result = JSON.parse(response.getContentText());
+    throw new Error(result.detail)
+  }
 }
 
 /**
@@ -174,12 +187,10 @@ function LAZY_REMOTE_SQL_V2(triggerCell, query, numTable, table1Notn, table2Notn
       method: 'post',
       contentType: 'application/json',
       payload: JSON.stringify(requestBody),
-      // muteHttpExceptions: true
+      muteHttpExceptions: true
   });
-  var result = JSON.parse(response.getContentText());
-  const outTable = result.outTable
-  // console.log(outTable)
-  return outTable
+
+  return handleServerResponse(response)
 }
 
 /**
@@ -231,10 +242,8 @@ function REMOTE_SQL_V2(query, numTable, table1, table2, arg1, arg2) {
   var response = UrlFetchApp.fetch(URL, {
       method: 'post',
       contentType: 'application/json',
-      payload: JSON.stringify(requestBody)
+      payload: JSON.stringify(requestBody),
+      muteHttpExceptions: true
   });
-  var result = JSON.parse(response.getContentText());
-  const outTable = result.outTable
-  // console.log(outTable)
-  return outTable
+  return handleServerResponse(response)
 }
