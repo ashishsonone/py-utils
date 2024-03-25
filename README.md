@@ -115,6 +115,9 @@ gcloud run services describe py-utils-api --region asia-south1
 [x] Treat empty string as NULL when sending to server
   [ ] replace '' => null before in request body
 
-[ ] Proper error handling when showing in googe sheet
+[x] Proper error handling when showing in google sheet
+
+[ ] Support PRQL (pipelined relational query language) support
+  [ ] pip install prql-python
 
 [ ] Add tests
