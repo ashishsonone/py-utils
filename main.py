@@ -5,6 +5,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import duckdb
 import pandas as pd
+import numpy
 
 app = FastAPI()
 
@@ -63,9 +64,10 @@ async def run_sql(body: JSONObject = None):
                 con.register(f"t{i+1}", df_list[i])
 
             out = con.query(query)
-            # print(out)
-            outDf = out.to_df()
+            debug(out)
+            outDf = out.to_df().replace({numpy.nan: None})
             outTable = [outDf.columns.tolist()] + outDf.values.tolist()
+            debug(outTable)
             result = {
                 'outTable' : outTable
             }

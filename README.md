@@ -24,7 +24,7 @@ pip install -r requirements.txt
 ```
 
 # Run local development
-uvicorn main:app --reload
+uvicorn main:app --port 8585 --reload
 
 # Copy
 DEST='ubuntu@sonone-cloud:~/APPS/PY-UTILS/'
@@ -85,6 +85,9 @@ fly scale count 1
 
 fly deploy --strategy immediate
 # rolling, immediate, canary, bluegreen
+
+# logs
+flyctl logs
 ```
 
 # glcoud run commands
@@ -108,4 +111,10 @@ gcloud run services describe py-utils-api --region asia-south1
 
 [x] Don't send empty rows to server api in appscript
   [ ] trim the table if first column of any row is empty
-  
+
+[x] Treat empty string as NULL when sending to server
+  [ ] replace '' => null before in request body
+
+[ ] Proper error handling when showing in googe sheet
+
+[ ] Add tests

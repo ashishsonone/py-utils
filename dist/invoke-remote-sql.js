@@ -5,7 +5,8 @@ function testRemoteSql() {
   const query = "SELECT * from t1 JOIN t2 ON t1.id == t2.id WHERE city LIKE '%$1%'"
 
   // out = REMOTE_SQL_V2(query, 2, t1, t2, 'Mum')
-  LAZY_REMOTE_SQL_V2("32", "SELECT COUNT(*) from t1 WHERE date='$1'", 1, "OilV2!A1:C100", "OilV2!O2")
+  // LAZY_REMOTE_SQL_V2("32", "SELECT COUNT(*) from t1 WHERE date='$1'", 1, "OilV2!A1:C100", "OilV2!O2")
+  LAZY_REMOTE_SQL_V2("1", "SELECT * from t1", 1, "Sheet4!A1:C10")
 }
 
 const BASE_URL = "https://py-utils-sononehouse.fly.dev"
@@ -21,9 +22,13 @@ function sanitizeTable(tableData){
       if (typeof(row[j]) == dateType) {
         row[j] = Utilities.formatDate(row[j], 'Asia/Kolkata', "YYYY-MM-dd");
       }
+      else if (row[j] === '') {
+        // consider it NULL
+        row[j] = null
+      }
     }
 
-    if (row[0] == ''){
+    if (row[0] == null){
       // empty first column, we break and break array till this index
       breakIndex = i
       break
@@ -94,9 +99,9 @@ function REMOTE_SQL(tableData, query) {
  * @customfunction
  * 
  */
-function testDebug(range) {
-  range = range || "Sheet1!A1:C5"
-  return typeof(val)
+function testDebug(cell) {
+  // range = range || "Sheet1!A1:C5"
+  return JSON.stringify({t: typeof(cell), v: cell})
 }
 
 function getTableFromRange(rangeRef) {
@@ -168,7 +173,8 @@ function LAZY_REMOTE_SQL_V2(triggerCell, query, numTable, table1Notn, table2Notn
   var response = UrlFetchApp.fetch(URL, {
       method: 'post',
       contentType: 'application/json',
-      payload: JSON.stringify(requestBody)
+      payload: JSON.stringify(requestBody),
+      // muteHttpExceptions: true
   });
   var result = JSON.parse(response.getContentText());
   const outTable = result.outTable
