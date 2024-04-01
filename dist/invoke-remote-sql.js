@@ -75,7 +75,11 @@ function REMOTE_SQL(tableData, query) {
   // replace sqlVariables in the query
   for (var i=0; i<sqlVariables.length; i++) {
     const varNum = i+1
-    finalQuery = finalQuery.replace("$" + varNum, sqlVariables[i])
+    finalQuery = finalQuery.replaceAll("$" + varNum, sqlVariables[i])
+  }
+
+  if (arguments[arguments.length-1] == 'DEBUG') {
+    return finalQuery
   }
 
   const requestBody = {
