@@ -126,23 +126,22 @@ take 10
 ```
 
 # TODO
-[x] Add support for multiple tables so you could do something like join
-  [ ] formula : `=REMOTE_SQL(query, num_table, t1, t2, t3, arg1, arg2, arg3)`
-  [ ] sql : `SELECT * FROM t1 JOIN t2 ON t1.Field1 = t2.Field2 WHERE name LIKE '%$1%'`
+- [x] Add support for multiple tables so you could do something like join
+  - [ ] formula : `=REMOTE_SQL(query, num_table, t1, t2, t3, arg1, arg2, arg3)`
+  - [ ] sql : `SELECT * FROM t1 JOIN t2 ON t1.Field1 = t2.Field2 WHERE name LIKE '%$1%'`
 
-[x] Lazy execution - Add support for stringified range ("A1:C10") instead of actual table ref (A1:C10) so that it doesn't recompute frequently when you're changing table content, but only when we want it
-  [x] formula : `LAZY_REMOTE_SQL_V2(A1, "SELECT COUNT(*) from mytable WHERE date='$1'", 1, "A1:C10", "O1")`
-  [x] support named ranges e.g "computed" - already works by default
+- [x] Lazy execution - Add support for stringified range ("A1:C10") instead of actual table ref (A1:C10) so that it doesn't recompute frequently when you're changing table content, but only when we want it
+  - [x] formula : `LAZY_REMOTE_SQL_V2(A1, "SELECT COUNT(*) from mytable WHERE date='$1'", 1, "A1:C10", "O1")`
+  - [x] support named ranges e.g "computed" - already works by default
 
-[x] Don't send empty rows to server api in appscript
-  [ ] trim the table if first column of any row is empty
+- [x] Don't send empty rows to server api in appscript
+  - [ ] trim the table if first column of any row is empty
 
-[x] Treat empty string as NULL when sending to server
-  [ ] replace '' => null before in request body
+- [x] Treat empty string as NULL when sending to server
+  - [ ] replace '' => null before in request body
 
-[x] Proper error handling when showing in google sheet
+- [x] Proper error handling when showing in google sheet
 
-[ ] Support PRQL (pipelined relational query language) support
-  [ ] pip install prql-python
+- [x] Support PRQL (pipelined relational query language) support using "prql-python"
 
-[ ] Add tests
+- [ ] Add tests
