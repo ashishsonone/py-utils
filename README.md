@@ -1,12 +1,25 @@
 # how to use in excel
 ```js
-// v1
+// v1 function
 REMOTE_SQL(table, query, arg1, arg2)
 
-
-// v2
-REMOTE_SQL_V2(query, num_tables, table1, table2, arg1, arg2)
+// v2 function
+REMOTE_SQL_V2(query, num_tables, table1, table2, arg1, arg2) // arg1 will replace $1, arg2 will replace $2 in the query string
 REMOTE_SQL_V2(query, 2, t1, t2, 'Mum')
+
+// simple example
+// {students} is the data range i.e table data e.g A1:G10
+=REMOTE_SQL({students}, "SELECT COUNT(*) from mytable")
+=REMOTE_SQL({students}, "SELECT COUNT(*) from mytable WHERE date > '$1'", "2023-01-05")
+=REMOTE_SQL({students}, A1, B1, B2) // A1 contains the sql query, B1 & B2 are arguments $1 & $2 respectively
+
+// join example
+// E26 contains the query = SELECT * from t1 JOIN t2 ON t1."Company ID" = t2.Company
+// A20:C24 is first table (Name,	Company Id,	Age)
+// E20:G23 is the second table (Company,	Location,	Rating)
+// we want to join the 2 tables based on Company Id
+=REMOTE_SQL_V2(E26, 2, A20:C24, E20:G23)
+
 ```
 
 # dependences
